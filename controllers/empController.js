@@ -27,24 +27,25 @@ var deleteById = function(request,response){
 };
 
 var patch = function(request,response){
-	Emp.find(request.query._id,function(err,employ){
+	Emp.findById(request.params.id,function(err,employ){
 		if(err){
-			response.send("Error");
+			response.send("Error getting ID");
 		}
 		else {
+
 			if(request.body._id){
-				delete request.body._id;
+				delete request.body[_id];
 			}
 
 			for(var attr in request.body){
 				employ[attr] = request.body[attr];
 			}
-
-			employ.save(function(err,emp){
-				if(!err){
-					response.send(emp);
-				}
+				var newEmp = new Emp(employ);
+				newEmp.save(function(err, emp){
+				if(err) response.send('Error');
+				else response.send(emp);
 			});
+
 		}
 	});
 };
