@@ -26,9 +26,33 @@ var deleteById = function(request,response){
 	});
 };
 
+var patch = function(request,response){
+	Emp.find(request.query._id,function(err,employ){
+		if(err){
+			response.send("Error");
+		}
+		else {
+			if(request.body._id){
+				delete request.body._id;
+			}
+
+			for(var attr in request.body){
+				employ[attr] = request.body[attr];
+			}
+
+			employ.save(function(err,emp){
+				if(!err){
+					response.send(emp);
+				}
+			});
+		}
+	});
+};
+
 module.exports = { 
 getAll : getAll,
 add : add,
-deleteById : deleteById
+deleteById : deleteById,
+patch : patch
 };
 
